@@ -56,9 +56,8 @@ class UpcomingMoviesRouter: BaseRouter {
 extension UpcomingMoviesRouter: UpcomingMoviesRouterProtocol {
 
     func showDetails(for movie: Movie) {
-        print("showDetails for movie -> \(movie.title)")
-//        let movieDetailsRouter = MovieDetailsRouter(movie: movie)
-//        movieDetailsRouter.present(on: _navigationController)
-//        self.presentedRouter = movieDetailsRouter
+        let movieDetailsRouter = MovieDetailsRouter(movie: movie)
+        movieDetailsRouter.present(on: _navigationController)
+        self.presentedRouter = movieDetailsRouter
     }
 }
