@@ -50,26 +50,14 @@ extension ContainerRouter: ContainerRouterProtocol {
     func updateCurrentScreen(_ screen: ContentScreen) {
         
         guard screen != _currentScreen else { return }
-//        switch screen {
-//
-//        case .home:
-//            let upcomingMoviesRouter = UpcomingMoviesRouter()
-//            _viewController.setCurrentViewController(upcomingMoviesRouter.viewController)
-//            _childRouter = upcomingMoviesRouter
-//        }
-        
-        _viewController.setCurrentViewController(ViewController(nibName: nil, bundle: nil))
-        
-        _currentScreen = screen
-    }
-}
+        switch screen {
 
-// TODO: to remove...
-class ViewController: UIViewController {
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        self.view.backgroundColor = .blue
+        case .home:
+            let upcomingMoviesRouter = UpcomingMoviesRouter()
+            _viewController.setCurrentViewController(upcomingMoviesRouter.viewController)
+            _childRouter = upcomingMoviesRouter
+        }
+
+        _currentScreen = screen
     }
 }
