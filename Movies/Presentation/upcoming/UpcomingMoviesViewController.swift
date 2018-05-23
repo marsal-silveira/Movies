@@ -44,7 +44,6 @@ class UpcomingMoviesViewController: BaseViewController {
         
         // create collection and its layout
         let collectionView = UICollectionView(frame: self.view.frame, collectionViewLayout: CollectionViewGridLayout())
-//        collectionView.isPrefetchingEnabled = false
 
         // set delegate and dataSource
         collectionView.dataSource = self

@@ -11,7 +11,6 @@ import RxSwift
 import RxCocoa
 
 protocol UpcomingMoviesInteractorProtocol {
-    
     var movies: Observable<RequestResponse<[Movie]>> { get }
     func fetchMovies(reset: Bool)
 }
@@ -29,9 +28,7 @@ class UpcomingMoviesInteractor: BaseInteractor {
 
     init(repository: MovieRepositoryProtocol) {
         _repository = repository
-        
         super.init()
-        
         self.bind()
     }
     

@@ -9,6 +9,7 @@
 // Brazil - Portuguese [pt-BR]
 
 // Error
+"error.404" = "¯\\_(ツ)_/¯"; // just for fun...
 "error.default" = "Oops... algo deu errado";
 "error.network" = "Não foi possível conectar com a rede. Por favor tente novamente";
 "error.timeout" = "Tempo de resposta excedido. Por favor tente novamente";

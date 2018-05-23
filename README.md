@@ -8,7 +8,7 @@ App to get upcoming movies using `The Movie Database (TMDb)` as reference.
 ## Development Stack
 
 - xCode 9.2
-- Swift 4
+- Swift 4.0
 - iOS Deployment Target: 10.0
 - CocoaPods as Dependency Manager
 - Architecture: VIPER + ViewModel + Reactive (RxSwift)

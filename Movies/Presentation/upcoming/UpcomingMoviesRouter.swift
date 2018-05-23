@@ -25,8 +25,8 @@ class UpcomingMoviesRouter: BaseRouter {
     
     override init() {
 
-        let genreRepository = GenreRepository(tMDbAPI: TMDbAPI())
-        let movieRepository = MovieRepository(tMDbAPI: TMDbAPI(), genreRepository: genreRepository)
+        let genreRepository = GenreRepository(tMDbAPI: TMDbAPI(), dao: GenreDao())
+        let movieRepository = MovieRepository(tMDbAPI: TMDbAPI(), dao: MovieDao(), genreRepository: genreRepository)
         let interactor = UpcomingMoviesInteractor(repository: movieRepository)
         
         _presenter = UpcomingMoviesPresenter(interactor: interactor)

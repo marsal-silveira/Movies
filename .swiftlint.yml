@@ -1,6 +1,6 @@
 excluded: # paths to ignore during linting. Takes precedence over `included`.
   - Pods
-  - Popcorn/Resources/R.generated.swift
+  - Movies/Resources/R.generated.swift
 
 disabled_rules:
   - trailing_whitespace

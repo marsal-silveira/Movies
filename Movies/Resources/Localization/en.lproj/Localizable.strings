@@ -9,6 +9,7 @@
 // English - Base
 
 // Error
+"error.404" = "¯\\_(ツ)_/¯"; // just for fun...
 "error.default" = "Oops... something went wrong";
 "error.network" = "Could not connect with network, please try again";
 "error.timeout" = "The operation couldn't be completed dua to a timeout";

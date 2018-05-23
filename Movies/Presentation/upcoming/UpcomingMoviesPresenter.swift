@@ -52,12 +52,11 @@ class UpcomingMoviesPresenter: BasePresenter {
     // public
     public weak var router: UpcomingMoviesRouterProtocol?
     
-    init(interactor: UpcomingMoviesInteractorProtocol) {
-    
+    init(interactor: UpcomingMoviesInteractorProtocol) {    
         _interactor = interactor
         
         super.init()
-        bind()
+        self.bind()
     }
 
     private func bind() {

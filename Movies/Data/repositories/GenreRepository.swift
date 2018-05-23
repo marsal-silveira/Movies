@@ -11,7 +11,6 @@ import RxSwift
 import RxCocoa
 
 protocol GenreRepositoryProtocol {
-    
     var genres: Observable<RequestResponse<[Genre]>> { get }
     func fetchGenres()
     func getGenres(byIds ids: [Int]) -> [Genre]
@@ -19,16 +18,74 @@ protocol GenreRepositoryProtocol {
 
 class GenreRepository: BaseRepository {
     
-    fileprivate let _TMDbAPI: TMDbAPIProtocol
-    fileprivate var _genresResponse = BehaviorRelay<RequestResponse<[Genre]>>(value: .new)
-    fileprivate var _genres: [Genre] = []
+    private let _TMDbAPI: TMDbAPIProtocol
+    private let _dao: GenreDaoProtocol
     
-    fileprivate var _disposeBag = DisposeBag()
+    private var _genresResponse = BehaviorRelay<RequestResponse<[Genre]>>(value: .new)
+    private var _genres: [Genre] = []
     
-    init(tMDbAPI: TMDbAPIProtocol) {
+    private var _disposeBag = DisposeBag()
+    
+    init(tMDbAPI: TMDbAPIProtocol, dao: GenreDaoProtocol) {
         _TMDbAPI = tMDbAPI
+        _dao = dao
+        
+        super.init()
+    }
+    
+    // *************************************************
+    // MARK: - API
+    // *************************************************
+    
+    private func fetchGenresFromAPI() {
+        
+        _TMDbAPI.genres()
+            .subscribe { [weak self] (event) in
+                guard let strongSelf = self else { return }
+                
+                switch event {
+                case .success(let genresResult):
+                    let genres = Genre.mapArray(genresResult: genresResult)
+                    
+                    // save genres into local storage and send response
+                    do {
+                        try strongSelf.saveGenresLocalStorage(genres: genres)
+                        strongSelf._genresResponse.accept(.success(genres))
+                    } catch let error {
+                        strongSelf._genresResponse.accept(.failure(error))
+                    }
+                    
+                case .error(let error):
+                    strongSelf._genresResponse.accept(.failure(error))
+                }
+            }
+            .disposed(by: _disposeBag)
+    }
+    
+    // *************************************************
+    // MARK: - Local Storage
+    // *************************************************
+    
+    private func fetchGenresFromLocalStorage() {
+        
+        do {
+            let genres = try _dao.getAll()
+            _genresResponse.accept(.success(genres))
+        } catch let error {
+            _genresResponse.accept(.failure(error))
+        }
+    }
+    
+    private func saveGenresLocalStorage(genres: [Genre]) throws {
+        
+        try _dao.clear()
+        try _dao.save(genres: genres)
     }
 }
+
+// *************************************************
+// MARK: - GenreRepositoryProtocol
+// *************************************************
 
 extension GenreRepository: GenreRepositoryProtocol {
     
@@ -40,20 +97,11 @@ extension GenreRepository: GenreRepositoryProtocol {
         
         _genresResponse.accept(.loading)
         
-        _TMDbAPI.genres()
-            .subscribe { [weak self] (event) in
-                guard let strongSelf = self else { return }
-
-                switch event {
-                case .success(let genresResult):
-                    let genres = Genre.mapArray(genresResult: genresResult)
-                    strongSelf._genresResponse.accept(.success(genres))
-
-                case .error(let error):
-                    strongSelf._genresResponse.accept(.failure(error))
-                }
-            }
-            .disposed(by: _disposeBag)
+        if NetworkManager.shared.isReachable {
+            self.fetchGenresFromAPI()
+        } else {
+            self.fetchGenresFromLocalStorage()
+        }
     }
     
     func getGenres(byIds ids: [Int]) -> [Genre] {

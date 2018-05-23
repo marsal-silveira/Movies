@@ -38,7 +38,6 @@ extension TMDbAPI {
                         throw MoyaError.jsonMapping(response)
                     }
                     let genres = Mapper<GenreResultAPI>(context: nil).mapArray(JSONArray: genresJSON)
-                    print("genres -> \(genres)")
                     return Single.just(genres)
                 })
                 .catchError({ (error) -> Single<[GenreResultAPI]> in return Single.error(ClientUtils.translateError(error)) })
