@@ -43,8 +43,8 @@ class Container: UIViewController {
     // MARK: - Properties
     // *************************************************
     
-    // this is necessary to retain the current rounter reference
-    private var _childRouter: BaseRouter?
+    // this is necessary to retain the current router reference... without this the presented router will be released from memory
+    private var _currentRouter: BaseRouter?
     
     private var _currentViewController: UIViewController? {
         
@@ -98,13 +98,13 @@ class Container: UIViewController {
             
         case .startup:
             let startupRouter = StartupRouter()
+            _currentRouter = startupRouter
             _currentViewController = startupRouter.viewController
-            _childRouter = startupRouter
             
         case .upcomingMovies:
             let upcomingMoviesRouter = UpcomingMoviesRouter()
+            _currentRouter = upcomingMoviesRouter
             _currentViewController = upcomingMoviesRouter.viewController
-            _childRouter = upcomingMoviesRouter
         }
 
         _currentScreen = screen

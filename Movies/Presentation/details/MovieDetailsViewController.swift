@@ -32,6 +32,10 @@ class MovieDetailsViewController: BaseViewController {
     // ************************************************
     // MARK: Properties
     // ************************************************
+    
+    override class var NibName: String? {
+        return Nibs.movieDetailsViewController.name
+    }
 
     private var _presenter: MovieDetailsPresenterProtocol {
         return basePresenter as! MovieDetailsPresenterProtocol
@@ -47,18 +51,6 @@ class MovieDetailsViewController: BaseViewController {
         return MovieDetailsHeaderView()
     }()
 
-    // ************************************************
-    // MARK: UIViewController Init | Lifecycle
-    // ************************************************
-    
-    init(presenter: BasePresenterProtocol) {
-        super.init(presenter: presenter, nibName: Nibs.movieDetailsViewController.name)
-    }
-    
-    convenience required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
     // ************************************************
     // MARK: Setup
     // ************************************************

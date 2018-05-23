@@ -46,13 +46,13 @@ class UpcomingMoviesPresenter: BasePresenter {
     private let _interactor: UpcomingMoviesInteractorProtocol
     private let _disposeBag = DisposeBag()
     
-    private var _movies = BehaviorRelay<[Movie]>(value: [])
+    private var _movies = Variable<[Movie]>([])
     private var _showLoading = true
 
     // public
     public weak var router: UpcomingMoviesRouterProtocol?
     
-    init(interactor: UpcomingMoviesInteractorProtocol) {    
+    init(interactor: UpcomingMoviesInteractorProtocol) {
         _interactor = interactor
         
         super.init()
@@ -69,16 +69,16 @@ class UpcomingMoviesPresenter: BasePresenter {
 
                 case .loading:
                     if strongSelf._showLoading {
-                        strongSelf._viewState.accept(.loading(LoadingViewModel(text: Strings.placeholderLoading())))
+                        strongSelf._viewState.value = .loading(LoadingViewModel(text: Strings.placeholderLoading()))
                     }
 
                 case .success(let movies):
-                    strongSelf._viewState.accept(.normal)
-                    strongSelf._movies.accept(movies)
+                    strongSelf._viewState.value = .normal
+                    strongSelf._movies.value = movies
 
                 case .failure(let error):
                     let placeholderViewModel = ErrorViewModel(text: Strings.errorDefault(), details: error.localizedDescription)
-                    strongSelf._viewState.accept(.error(placeholderViewModel))
+                    strongSelf._viewState.value = .error(placeholderViewModel)
 
                 default:
                     break
@@ -116,7 +116,7 @@ extension UpcomingMoviesPresenter: UpcomingMoviesPresenterProtocol {
         
         guard let selectedMovie = _movies.value.filter({ (m) -> Bool in return m.id == movie.id }).first else {
             let placeholderViewModel = ErrorViewModel(text: Strings.errorDefault(), details: Strings.upcomingMoviesMovieNotFound())
-            _viewState.accept(.error(placeholderViewModel))
+            _viewState.value = .error(placeholderViewModel)
             return
         }
         router?.showDetails(for: selectedMovie)

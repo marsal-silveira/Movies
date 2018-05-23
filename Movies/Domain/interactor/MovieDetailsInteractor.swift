@@ -17,11 +17,11 @@ protocol MovieDetailsInteractorProtocol {
 
 class MovieDetailsInteractor: BaseInteractor {
 
-    private var _movie: BehaviorRelay<Movie>
+    private var _movie: Variable<Movie>
     
     init(movie: Movie) {
 
-        _movie = BehaviorRelay<Movie>(value: movie)
+        _movie = Variable<Movie>(movie)
         super.init()
     }
 }

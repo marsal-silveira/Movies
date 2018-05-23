@@ -38,15 +38,15 @@ class StartupPresenter: BasePresenter {
                 switch response {
                     
                 case .loading:
-                    strongSelf._viewState.accept(.loading(LoadingViewModel(text: Strings.placeholderLoading())))
+                    strongSelf._viewState.value = .loading(LoadingViewModel(text: Strings.placeholderLoading()))
                     
                 case .success:
-                    strongSelf._viewState.accept(.normal)
+                    strongSelf._viewState.value = .normal
                     strongSelf.router?.showUpcommingMovies()
                     
                 case .failure(let error):
                     let placeholderViewModel = ErrorViewModel(text: Strings.errorDefault(), details: error.localizedDescription)
-                    strongSelf._viewState.accept(.error(placeholderViewModel))
+                    strongSelf._viewState.value = .error(placeholderViewModel)
                     
                 default:
                     break

@@ -20,7 +20,7 @@ class UpcomingMoviesInteractor: BaseInteractor {
     private let _repository: MovieRepositoryProtocol
     private var _disposeBag = DisposeBag()
 
-    private var _moviesResponse = BehaviorRelay<RequestResponse<[Movie]>>(value: .new)
+    private var _moviesResponse = Variable<RequestResponse<[Movie]>>(.new)
     
     private var _movies = [Movie]()
     private var _totalPages: Int = 0
@@ -42,16 +42,16 @@ class UpcomingMoviesInteractor: BaseInteractor {
                 switch response {
 
                 case .loading:
-                    strongSelf._moviesResponse.accept(.loading)
+                    strongSelf._moviesResponse.value = .loading
                     
                 case .success(let upcomingMovies):
                     strongSelf._totalPages = upcomingMovies.totalPages
                     strongSelf._currentPage = upcomingMovies.page
                     strongSelf._movies.append(contentsOf: upcomingMovies.movies)
-                    strongSelf._moviesResponse.accept(.success(strongSelf._movies))
+                    strongSelf._moviesResponse.value = .success(strongSelf._movies)
                     
                 case .failure(let error):
-                    strongSelf._moviesResponse.accept(.failure(error))
+                    strongSelf._moviesResponse.value = .failure(error)
                     
                 default:
                     break

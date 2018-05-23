@@ -20,7 +20,7 @@ class MovieRepository: BaseRepository {
     private let _TMDbAPI: TMDbAPIProtocol
     private let _dao: MovieDaoProtocol
     
-    private var _upcomingMoviesResponse = BehaviorRelay<RequestResponse<UpcomingMovies>>(value: .new)
+    private var _upcomingMoviesResponse = Variable<RequestResponse<UpcomingMovies>>(.new)
     
     private let _genreRepository: GenreRepositoryProtocol
     private var _genres: [Genre] = []
@@ -52,13 +52,13 @@ class MovieRepository: BaseRepository {
                     // save movies into local storage and send response
                     do {
                         try strongSelf.saveMoviesLocalStorage(movies: upcomingMovies.movies, clear: page == 1)
-                        strongSelf._upcomingMoviesResponse.accept(.success(upcomingMovies))
+                        strongSelf._upcomingMoviesResponse.value = .success(upcomingMovies)
                     } catch let error {
-                        strongSelf._upcomingMoviesResponse.accept(.failure(error))
+                        strongSelf._upcomingMoviesResponse.value = .failure(error)
                     }
 
                 case .error(let error):
-                    strongSelf._upcomingMoviesResponse.accept(.failure(error))
+                    strongSelf._upcomingMoviesResponse.value = .failure(error)
                 }
             }
             .disposed(by: _disposeBag)
@@ -73,9 +73,9 @@ class MovieRepository: BaseRepository {
         do {
             let movies = try _dao.getAll()
             let upconigMovies = UpcomingMovies(page: page, totalPages: 1, movies: movies)
-            _upcomingMoviesResponse.accept(.success(upconigMovies))
+            _upcomingMoviesResponse.value = .success(upconigMovies)
         } catch let error {
-            _upcomingMoviesResponse.accept(.failure(error))
+            _upcomingMoviesResponse.value = .failure(error)
         }
     }
     
@@ -100,7 +100,7 @@ extension MovieRepository: MovieRepositoryProtocol {
     
     func fetchUpcomingMovies(page: Int) {
         
-        _upcomingMoviesResponse.accept(.loading)
+        _upcomingMoviesResponse.value = .loading
         
         if NetworkManager.shared.isReachable {
             self.fetchUpcomingMoviesFromAPI(page: page)

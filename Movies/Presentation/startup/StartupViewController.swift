@@ -17,24 +17,16 @@ class StartupViewController: BaseViewController {
     // MARK: Properties
     // ************************************************
     
+    override class var NibName: String? {
+        return Nibs.startupViewController.name
+    }
+    
     private var _presenter: StartupPresenterProtocol {
         return basePresenter as! StartupPresenterProtocol
     }
     
     fileprivate var _disposeBag = DisposeBag()
     
-    // ************************************************
-    // MARK: UIViewController Init | Lifecycle
-    // ************************************************
-    
-    init(presenter: BasePresenterProtocol) {
-        super.init(presenter: presenter, nibName: Nibs.startupViewController.name)
-    }
-    
-    convenience required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-
     // ************************************************
     // MARK: Setup
     // ************************************************

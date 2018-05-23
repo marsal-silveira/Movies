@@ -326,8 +326,8 @@
 			isa = PBXGroup;
 			children = (
 				57287FFE20B278BD00D5AD92 /* BaseNavigationViewController.swift */,
-				57287FFF20B278BD00D5AD92 /* BasePresenter.swift */,
 				5728800020B278BD00D5AD92 /* BaseRouter.swift */,
+				57287FFF20B278BD00D5AD92 /* BasePresenter.swift */,
 				5728800120B278BD00D5AD92 /* BaseViewController.swift */,
 			);
 			path = base;
@@ -417,8 +417,8 @@
 		5728802E20B2802500D5AD92 /* upcoming */ = {
 			isa = PBXGroup;
 			children = (
-				5728802F20B2802500D5AD92 /* UpcomingMoviesPresenter.swift */,
 				5728803020B2802500D5AD92 /* UpcomingMoviesRouter.swift */,
+				5728802F20B2802500D5AD92 /* UpcomingMoviesPresenter.swift */,
 				5728803120B2802500D5AD92 /* UpcomingMoviesViewController.swift */,
 				5728803220B2802500D5AD92 /* views */,
 			);

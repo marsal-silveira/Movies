@@ -21,7 +21,7 @@ class GenreRepository: BaseRepository {
     private let _TMDbAPI: TMDbAPIProtocol
     private let _dao: GenreDaoProtocol
     
-    private var _genresResponse = BehaviorRelay<RequestResponse<[Genre]>>(value: .new)
+    private var _genresResponse = Variable<RequestResponse<[Genre]>>(.new)
     private var _genres: [Genre] = []
     
     private var _disposeBag = DisposeBag()
@@ -50,13 +50,13 @@ class GenreRepository: BaseRepository {
                     // save genres into local storage and send response
                     do {
                         try strongSelf.saveGenresLocalStorage(genres: genres)
-                        strongSelf._genresResponse.accept(.success(genres))
+                        strongSelf._genresResponse.value = .success(genres)
                     } catch let error {
-                        strongSelf._genresResponse.accept(.failure(error))
+                        strongSelf._genresResponse.value = .failure(error)
                     }
                     
                 case .error(let error):
-                    strongSelf._genresResponse.accept(.failure(error))
+                    strongSelf._genresResponse.value = .failure(error)
                 }
             }
             .disposed(by: _disposeBag)
@@ -70,9 +70,9 @@ class GenreRepository: BaseRepository {
         
         do {
             let genres = try _dao.getAll()
-            _genresResponse.accept(.success(genres))
+            _genresResponse.value = .success(genres)
         } catch let error {
-            _genresResponse.accept(.failure(error))
+            _genresResponse.value = .failure(error)
         }
     }
     
@@ -95,7 +95,7 @@ extension GenreRepository: GenreRepositoryProtocol {
     
     func fetchGenres() {
         
-        _genresResponse.accept(.loading)
+        _genresResponse.value = .loading
         
         if NetworkManager.shared.isReachable {
             self.fetchGenresFromAPI()

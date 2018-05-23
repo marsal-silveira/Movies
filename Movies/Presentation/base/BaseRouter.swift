@@ -11,6 +11,7 @@ import UIKit
 
 class BaseRouter: NSObject {
     
+    // used to retain the presented router references... without this the presented router will be released from memory
     var presentedRouter: BaseRouter?
 
     deinit {

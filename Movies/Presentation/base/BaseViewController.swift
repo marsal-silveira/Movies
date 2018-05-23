@@ -17,6 +17,10 @@ class BaseViewController: UIViewController {
     // MARK: Properties
     // ************************************************
     
+    class var NibName: String? {
+        return nil
+    }
+    
     // private
     private var _placeholder: Placeholder?
     private let _disposeBag = DisposeBag()
@@ -29,9 +33,9 @@ class BaseViewController: UIViewController {
     // MARK: Init | Lifecycle
     // ************************************************
     
-    init(presenter: BasePresenterProtocol, nibName: String? = nil) {
+    init(presenter: BasePresenterProtocol) {
         basePresenter = presenter
-        super.init(nibName: nibName, bundle: nil)
+        super.init(nibName: type(of: self).NibName, bundle: nil)
     }
 
     convenience required init?(coder aDecoder: NSCoder) {
@@ -122,7 +126,7 @@ extension BaseViewController {
 
     private func presentPlaceholder(type: PlaceholderType) {
         view.endEditing(true)
-        self.enableNavbarIntems(false)
+        self.enableNavbarItems(false)
         
         switch type {
         case .loading(let viewModel):
@@ -136,7 +140,7 @@ extension BaseViewController {
     private func dismissPlaceholder() {
         _placeholder?.dismiss()
         _placeholder = nil
-        self.enableNavbarIntems(true)
+        self.enableNavbarItems(true)
     }
 
     private func showLoading(viewModel: LoadingViewModel) {
@@ -154,15 +158,8 @@ extension BaseViewController {
         errorView.present(on: self.view)
         _placeholder = errorView
     }
-}
-
-// ************************************************
-// MARK: NavigationBar
-// ************************************************
-
-extension BaseViewController {
     
-    private func enableNavbarIntems(_ isEnable: Bool) {
+    private func enableNavbarItems(_ isEnable: Bool) {
         if let leftButtons = navigationItem.leftBarButtonItems {
             leftButtons.forEach { $0.isEnabled = isEnable }
         }
