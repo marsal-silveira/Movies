@@ -33,7 +33,7 @@ struct MovieDetailsVO {
 protocol MovieDetailsPresenterProtocol: BasePresenterProtocol {
 
     var router: MovieDetailsRouterProtocol? { get set }
-    var movie: Observable<MovieDetailsVO> { get }
+    var movie: Driver<MovieDetailsVO> { get }
 }
 
 class MovieDetailsPresenter: BasePresenter {
@@ -54,18 +54,17 @@ class MovieDetailsPresenter: BasePresenter {
 
 extension MovieDetailsPresenter: MovieDetailsPresenterProtocol {
     
-    var movie: Observable<MovieDetailsVO> {
+    var movie: Driver<MovieDetailsVO> {
 
         return _interactor
             .movie
-            .flatMap { (movie) -> Observable<MovieDetailsVO> in
+            .flatMap { (movie) -> Driver<MovieDetailsVO> in
                 
-                // TODO: Check this... call TMDbAPI from here looks like strange :|
-                let backdropPath = movie.backdropPath != nil ? "\(TMDbAPI.backdropBasePath)\(movie.backdropPath!)" : nil
+                let backdropPath = movie.buildBackdropPath()
                 let rating = "★ \(movie.rating)"
                 let releaseDate = movie.releaseDate
                 let movieDetails = MovieDetailsVO(backdropPath: backdropPath, title: movie.title, rating: rating, releaseDate: releaseDate, genre: movie.genresStr, overview: movie.overview)
-                return Observable.just(movieDetails)
+                return Driver.just(movieDetails)
             }
     }
 }

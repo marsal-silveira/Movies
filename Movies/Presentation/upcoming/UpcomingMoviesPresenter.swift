@@ -33,7 +33,7 @@ struct UpcomingMovieVO {
 protocol UpcomingMoviesPresenterProtocol: BasePresenterProtocol {
 
     var router: UpcomingMoviesRouterProtocol? { get set }
-    var movies: Observable<[UpcomingMovieVO]> { get }
+    var movies: Driver<[UpcomingMovieVO]> { get }
     
     func fetchMovies(reset: Bool)
     
@@ -62,7 +62,7 @@ class UpcomingMoviesPresenter: BasePresenter {
     private func bind() {
 
         _interactor.movies
-            .bind {[weak self] (response) in
+            .drive(onNext: { [weak self] (response) in
                 guard let strongSelf = self else { return }
 
                 switch response {
@@ -83,27 +83,26 @@ class UpcomingMoviesPresenter: BasePresenter {
                 default:
                     break
                 }
-            }
+            })
             .disposed(by: _disposeBag)
     }
 }
 
 extension UpcomingMoviesPresenter: UpcomingMoviesPresenterProtocol {
     
-    var movies: Observable<[UpcomingMovieVO]> {
+    var movies: Driver<[UpcomingMovieVO]> {
 
         return _movies
-            .asObservable()
-            .flatMap { (movies) -> Observable<[UpcomingMovieVO]> in
+            .asDriver()
+            .flatMap { (movies) -> Driver<[UpcomingMovieVO]> in
 
                 let mm = movies.map { (movie) -> UpcomingMovieVO in
                     
-                    // TODO: Check this... call TMDbAPI from here looks like strange :|
-                    let posterPath = movie.posterPath != nil ? "\(TMDbAPI.posterBasePath)\(movie.posterPath!)" : nil
+                    let posterPath = movie.buildPosterPath()
                     let rating = "★ \(movie.rating)"
                     return UpcomingMovieVO(id: movie.id, posterPath: posterPath, title: movie.title, genres: movie.genresStr, releaseDate: movie.releaseDate, rating: rating)
                 }
-                return Observable.just(mm)
+                return Driver.just(mm)
             }
     }
 

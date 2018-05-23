@@ -18,7 +18,7 @@ enum ViewState {
 }
 
 protocol BasePresenterProtocol {
-    var viewState: Observable<ViewState> { get }
+    var viewState: Driver<ViewState> { get }
 }
 
 class BasePresenter {
@@ -32,7 +32,7 @@ class BasePresenter {
 
 extension BasePresenter: BasePresenterProtocol {
     
-    var viewState: Observable<ViewState> {
-        return _viewState.asObservable()
+    var viewState: Driver<ViewState> {
+        return _viewState.asDriver()
     }
 }

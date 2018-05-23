@@ -59,9 +59,9 @@ class MovieDetailsViewController: BaseViewController {
         super.bind()
 
         _presenter.movie
-            .bind { [weak self] (movie) in
+            .drive(onNext: { [weak self] (movie) in
                 self?.loadData(movie)
-            }
+            })
             .disposed(by: _disposeBag)
     }
     

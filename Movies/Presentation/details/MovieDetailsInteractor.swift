@@ -11,8 +11,7 @@ import RxSwift
 import RxCocoa
 
 protocol MovieDetailsInteractorProtocol {
-
-    var movie: Observable<Movie> { get }
+    var movie: Driver<Movie> { get }
 }
 
 class MovieDetailsInteractor: BaseInteractor {
@@ -28,7 +27,7 @@ class MovieDetailsInteractor: BaseInteractor {
 
 extension MovieDetailsInteractor: MovieDetailsInteractorProtocol {
     
-    var movie: Observable<Movie> {
-        return _movie.asObservable()
+    var movie: Driver<Movie> {
+        return _movie.asDriver()
     }
 }

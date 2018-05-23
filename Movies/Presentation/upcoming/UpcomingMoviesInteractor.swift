@@ -11,7 +11,7 @@ import RxSwift
 import RxCocoa
 
 protocol UpcomingMoviesInteractorProtocol {
-    var movies: Observable<RequestResponse<[Movie]>> { get }
+    var movies: Driver<RequestResponse<[Movie]>> { get }
     func fetchMovies(reset: Bool)
 }
 
@@ -63,8 +63,8 @@ class UpcomingMoviesInteractor: BaseInteractor {
 
 extension UpcomingMoviesInteractor: UpcomingMoviesInteractorProtocol {
     
-    var movies: Observable<RequestResponse<[Movie]>> {
-        return _moviesResponse.asObservable()
+    var movies: Driver<RequestResponse<[Movie]>> {
+        return _moviesResponse.asDriver()
     }
     
     func fetchMovies(reset: Bool) {

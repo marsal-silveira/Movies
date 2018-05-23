@@ -39,6 +39,15 @@ struct Movie {
         self.rating = rating
         self.genres = genres
     }
+    
+    // poster | backdrop paths    
+    func buildPosterPath() -> String? {
+        return TMDbAPI.buildPosterPath(self.posterPath)
+    }
+    
+    func buildBackdropPath() -> String? {
+        return TMDbAPI.buildBackdropPath(self.backdropPath)
+    }
 }
 
 // Decoder...

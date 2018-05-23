@@ -11,7 +11,7 @@ import RxSwift
 import RxCocoa
 
 protocol StartupInteractorProtocol {
-    var isDone: Observable<RequestResponse<Void>> { get }
+    var isDone: Driver<RequestResponse<Void>> { get }
     func fetchInitialData()
 }
 
@@ -56,8 +56,8 @@ class StartupInteractor: BaseInteractor {
 
 extension StartupInteractor: StartupInteractorProtocol {
     
-    var isDone: Observable<RequestResponse<Void>> {
-        return _isDone.asObservable()
+    var isDone: Driver<RequestResponse<Void>> {
+        return _isDone.asDriver()
     }
     
     func fetchInitialData() {

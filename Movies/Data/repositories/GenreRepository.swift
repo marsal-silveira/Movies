@@ -13,6 +13,7 @@ import RxCocoa
 protocol GenreRepositoryProtocol {
     var genres: Observable<RequestResponse<[Genre]>> { get }
     func fetchGenres()
+    func getAllGenres() -> [Genre]
     func getGenres(byIds ids: [Int]) -> [Genre]
 }
 
@@ -101,6 +102,15 @@ extension GenreRepository: GenreRepositoryProtocol {
             self.fetchGenresFromAPI()
         } else {
             self.fetchGenresFromLocalStorage()
+        }
+    }
+    
+    func getAllGenres() -> [Genre] {
+        do {
+            return try _dao.getAll()
+        } catch let error {
+            print("error getting genres. \(error.localizedDescription)")
+            return []
         }
     }
     

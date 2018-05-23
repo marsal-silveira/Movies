@@ -12,6 +12,7 @@ import RxSwift
 import ObjectMapper
 
 protocol TMDbAPIProtocol {
+    
     // Movies
     func upcomingMovies(page: Int) -> Single<UpcomingMoviesResultAPI>
     
@@ -34,8 +35,18 @@ struct TMDbAPI {
     
     // Images constants (poster and backdrop paths)
     private static let imageBasePath: String = "https://image.tmdb.org/t/p"
-    static let posterBasePath: String = imageBasePath + "/w300"
-    static let backdropBasePath: String = imageBasePath + "/w780"
+    private static let posterBasePath: String = imageBasePath + "/w300"
+    private static let backdropBasePath: String = imageBasePath + "/w780"
+    
+    static func buildPosterPath(_ posterPath: String?) -> String? {
+        guard let posterPath = posterPath else { return nil }
+        return "\(TMDbAPI.posterBasePath)\(posterPath)"
+    }
+    
+    static func buildBackdropPath(_ backdropPath: String?) -> String? {
+        guard let backdropPath = backdropPath else { return nil }
+        return "\(TMDbAPI.backdropBasePath)\(backdropPath)"
+    }
 }
 
 extension TMDbAPI: TMDbAPIProtocol {

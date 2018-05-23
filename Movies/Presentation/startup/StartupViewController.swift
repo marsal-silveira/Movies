@@ -8,8 +8,6 @@
 
 import Foundation
 import UIKit
-import RxSwift
-import RxCocoa
 
 class StartupViewController: BaseViewController {
 
@@ -25,15 +23,12 @@ class StartupViewController: BaseViewController {
         return basePresenter as! StartupPresenterProtocol
     }
     
-    fileprivate var _disposeBag = DisposeBag()
-    
     // ************************************************
     // MARK: Setup
     // ************************************************
     
     override func setupOnLoad() {
         super.setupOnLoad()
-
         _presenter.fetchInitialData()
     }
 }

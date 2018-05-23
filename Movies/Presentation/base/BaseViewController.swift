@@ -73,7 +73,7 @@ class BaseViewController: UIViewController {
     internal func bind() {
 
         basePresenter.viewState
-            .bind {[weak self] (state) in
+            .drive(onNext: { [weak self] (state) in
                 guard let strongSelf = self else { return }
                 switch state {
                     
@@ -86,7 +86,7 @@ class BaseViewController: UIViewController {
                 case .error(let viewModel):
                     strongSelf.presentPlaceholder(type: .error(viewModel))
                 }
-            }
+            })
             .disposed(by: _disposeBag)
     }
     

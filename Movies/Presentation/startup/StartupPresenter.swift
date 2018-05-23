@@ -32,7 +32,7 @@ class StartupPresenter: BasePresenter {
     private func bind() {
         
         _interactor.isDone
-            .bind {[weak self] (response) in
+            .drive(onNext: { [weak self] (response) in
                 guard let strongSelf = self else { return }
                 
                 switch response {
@@ -51,7 +51,7 @@ class StartupPresenter: BasePresenter {
                 default:
                     break
                 }
-            }
+            })
             .disposed(by: _disposeBag)
     }
 }

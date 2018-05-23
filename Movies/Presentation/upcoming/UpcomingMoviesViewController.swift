@@ -74,7 +74,7 @@ class UpcomingMoviesViewController: BaseViewController {
         super.bind()
 
         _presenter.movies
-            .bind(onNext: { [weak self] (movies) in self?.showMovies(movies) })
+            .drive(onNext: { [weak self] (movies) in self?.showMovies(movies) })
             .disposed(by: _disposeBag)
     }
     
