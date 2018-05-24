@@ -142,11 +142,9 @@ extension UpcomingMoviesViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
         let cell = collectionView.dequeueReusableCell(forIndexPath: indexPath) as MovieCell
-        DispatchQueue.main.async { [weak self] in
-            guard let strongSelf = self else { return }
-        
-            cell.setup(movie: strongSelf._movies[indexPath.row])
-            
+        cell.setup(movie: _movies[indexPath.row])
+
+        DispatchQueue.main.async {
             cell.transform = CGAffineTransform(scaleX: 0.8, y: 0.8)
             UIView.animate(withDuration: 0.4) {
                 cell.transform = CGAffineTransform.identity
@@ -164,8 +162,7 @@ extension UpcomingMoviesViewController: UICollectionViewDataSource {
 extension UpcomingMoviesViewController: UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        DispatchQueue.main.async {
-            [weak self] in
+        DispatchQueue.main.async { [weak self] in
             guard let strongSelf = self else { return }
             strongSelf._presenter.didSelectMovie(strongSelf._movies[indexPath.row])
         }
@@ -173,9 +170,13 @@ extension UpcomingMoviesViewController: UICollectionViewDelegate {
 
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
 
-        // we use this to get movies on demand... maybe has a better way to do this but for now it works :)
-        if indexPath.row == _movies.count-1 {
-            _presenter.fetchMovies(reset: false)
+        DispatchQueue.main.async { [weak self] in
+            guard let strongSelf = self else { return }
+            
+            // we use this to get movies on demand... maybe has a better way to do this but for now it works :)
+            if indexPath.row == strongSelf._movies.count-1 {
+                strongSelf._presenter.fetchMovies(reset: false)
+            }
         }
     }
 }

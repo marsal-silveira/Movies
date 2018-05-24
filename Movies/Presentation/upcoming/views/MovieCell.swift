@@ -29,22 +29,10 @@ class MovieCell: UICollectionViewCell {
     
     override func prepareForReuse() {
         super.prepareForReuse()
-        
-        DispatchQueue.main.async { [weak self] in
-            self?.posterImageView.image = #imageLiteral(resourceName: "img_placeholder")
-            self?.loadignIndicator.isHidden = false
-            self?.loadignIndicator.startAnimating()
-        }
-    }
-    
-    func setup(movie: UpcomingMovieVO) {
 
-        self.titleLabel.text = movie.title
-        self.genresLabel.text = movie.genres
-        self.releaseDateLabel.text = movie.releaseDate
-        self.ratingLabel.text = movie.rating
-        
-        self.downloadPoster(movie: movie)
+        self.posterImageView.image = #imageLiteral(resourceName: "img_placeholder")
+        self.loadignIndicator.isHidden = false
+        self.loadignIndicator.startAnimating()
     }
     
     private func updatePosterImage(_ image: UIImage) {
@@ -58,11 +46,27 @@ class MovieCell: UICollectionViewCell {
         
         if let picturePath = movie.posterPath, let pictureURL = URL(string: picturePath) {
             
-            ImageDownloader.default.downloadImage(with: pictureURL, completionHandler: { [weak self] (image, error, _, _) in
-                self?.updatePosterImage(image ?? #imageLiteral(resourceName: "img_placeholder"))
-            })
+            ImageDownloader.default.downloadImage(
+                with: pictureURL,
+                completionHandler: { [weak self] (image, error, _, _) in
+                    self?.updatePosterImage(image ?? #imageLiteral(resourceName: "img_placeholder"))
+                }
+            )
         } else {
             self.updatePosterImage(#imageLiteral(resourceName: "img_placeholder"))
+        }
+    }
+    
+    func setup(movie: UpcomingMovieVO) {
+        
+        DispatchQueue.main.async { [weak self] in
+        
+            self?.titleLabel.text = movie.title
+            self?.genresLabel.text = movie.genres
+            self?.releaseDateLabel.text = movie.releaseDate
+            self?.ratingLabel.text = movie.rating
+            
+            self?.downloadPoster(movie: movie)
         }
     }
 }

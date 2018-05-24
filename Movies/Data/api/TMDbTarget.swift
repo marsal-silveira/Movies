@@ -74,10 +74,12 @@ extension TMDbTarget {
     }
 }
 
+// ************************************************
+// MARK: - Provider Default values...
+// ************************************************
+
 extension TMDbTarget {
-    
-    // Provider Default values...
-    
+
     static func endpoint(_ target: Self) -> Endpoint<Self> {
         return Endpoint<Self>(
             url: "\(target.baseURL)\(target.path)",
