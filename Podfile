@@ -35,9 +35,14 @@ target 'Movies' do
     'Moya-ObjectMapper',
     'ObjectMapper'
   ]
+
+  target 'MoviesTests' do
+    inherit! :search_paths
+  end
   
   post_install do |installer|
     installer.pods_project.targets.each do |target|
+      # puts "#{target.name}"
       swift_version = nil
       
       if swift4.include?(target.name)
@@ -55,12 +60,4 @@ target 'Movies' do
     end
   end
   
-end
-
-target 'MoviesTests' do
-  
-end
-
-target 'MoviesUITests' do
-
 end
