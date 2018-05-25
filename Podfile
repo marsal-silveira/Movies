@@ -20,6 +20,13 @@ target 'Movies' do
 
   #API/Network
   pod 'Moya-ObjectMapper/RxSwift'
+  
+  target 'MoviesTests' do
+      inherit! :search_paths
+      
+      pod 'RxBlocking', '4.1.2'
+      pod 'RxTest', '4.1.2'
+  end
     
   swift4 = [
     'R.swift',
@@ -30,15 +37,13 @@ target 'Movies' do
     'RxSwift',
     'RxCocoa',
     'RxGesture',
+    'RxBlocking',
+    'RxTest',
     'Alamofire',
     'Moya',
     'Moya-ObjectMapper',
     'ObjectMapper'
   ]
-
-  target 'MoviesTests' do
-    inherit! :search_paths
-  end
   
   post_install do |installer|
     installer.pods_project.targets.each do |target|

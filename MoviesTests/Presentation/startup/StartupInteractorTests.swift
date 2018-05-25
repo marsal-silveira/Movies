@@ -10,16 +10,22 @@ import Foundation
 import XCTest
 import RxSwift
 import RxCocoa
+import RxTest
+
 @testable import Movies
 
 class StartupInteractorTests: XCTestCase {
     
-    private var _interactor: StartupInteractorProtocol?
+    private var _disposeBag: DisposeBag!
+    private var _scheduler: TestScheduler!
+    private var _interactor: StartupInteractorProtocol!
     
     override func setUp() {
         super.setUp()
         print("setUp()")
         
+        _disposeBag = DisposeBag()
+        _scheduler = TestScheduler(initialClock: 0)
         _interactor = StartupInteractor(genreRepository: GenreRepositoryMock())
     }
     
@@ -27,49 +33,30 @@ class StartupInteractorTests: XCTestCase {
         super.tearDown()
         print("tearDown()")
         
+        _disposeBag = nil
+        _scheduler = nil
         _interactor = nil
     }
-    
-    func testAllGenres() {
-//        let genres = _interactor?.
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-    }
-    
-    func testPerformanceExample() {
-        // This is an example of a performance test case.
-        self.measure {
-            // Put the code you want to measure the time of here.
-        }
-    }
-}
 
-class GenreRepositoryMock: GenreRepositoryProtocol {
-    
-    var genres: Observable<RequestResponse<[Genre]>> {
-        let result = [Genre(id: 1, name: "Action"), Genre(id: 2, name: "Comedy")]
-        return Observable.from(optional: .success(result))
-    }
-    
-    func fetchGenres() {
+    func test_isDone_ok() throws {
+        print(">>> test_isDone_ok")
+        print(">>> [START]")
         
-//        _genresResponse.value = .loading
-//
-//        if NetworkManager.shared.isReachable {
-//            self.fetchGenresFromAPI()
-//        } else {
-//            self.fetchGenresFromLocalStorage()
-//        }
-    }
-    
-    func getAllGenres() -> [Genre] {
-        return [Genre(id: 1, name: "Action"), Genre(id: 2, name: "Comedy")]
-    }
-    
-    func getGenres(byIds ids: [Int]) -> [Genre] {
-        let result = [Genre(id: 1, name: "Action"), Genre(id: 2, name: "Comedy")]
-        return result.filter({ (genre) -> Bool in
-            return ids.contains(genre.id)
+        let observable = _scheduler.createObserver(RequestResponse<Void>.self)
+        _interactor.isDone.asDriver().drive(observable).disposed(by: _disposeBag)
+        
+        _interactor.fetchInitialData()
+        
+        XCTAssert(observable.events.contains { event in
+            print("event -> \(event.value)")
+            let response = event.value.element ?? .new
+            switch response {
+            case .success:
+                return true
+            default:
+                return false
+            }
         })
+        print(">>> [END]")
     }
 }

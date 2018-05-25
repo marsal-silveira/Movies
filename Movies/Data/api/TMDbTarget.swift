@@ -92,8 +92,9 @@ extension TMDbTarget {
     
     static var plugins: [PluginType] {
         return [
-            NetworkActivityPlugin { (change, _) in UIApplication.shared.isNetworkActivityIndicatorVisible = change == .began },
-            NetworkLoggerPlugin(verbose: true)
+//            NetworkActivityPlugin { (change, _) in UIApplication.shared.isNetworkActivityIndicatorVisible = change == .began },
+//            NetworkLoggerPlugin(verbose: true)
+            NetworkActivityPlugin { (change, _) in UIApplication.shared.isNetworkActivityIndicatorVisible = change == .began }
         ]
     }
 }
