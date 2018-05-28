@@ -94,7 +94,7 @@ extension TMDbTarget {
         return [
             NetworkActivityPlugin { (change, _) in UIApplication.shared.isNetworkActivityIndicatorVisible = change == .began }
             // for debug purpose
-//            ,NetworkLoggerPlugin(verbose: true)
+            ,NetworkLoggerPlugin(verbose: true)
         ]
     }
 }
