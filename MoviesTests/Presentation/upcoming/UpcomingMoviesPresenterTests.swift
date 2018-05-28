@@ -1,123 +1,75 @@
-////
-////  UpcomingMoviesPresenter.swift
-////  Movies
-////
-////  Created by Marsal Silveira.
-////  Copyright © 2018 Marsal Silveira. All rights reserved.
-////
 //
-//import UIKit
-//import RxSwift
-//import RxCocoa
+//  UpcomingMoviesPresenter.swift
+//  Movies
 //
-//// Value Object to be used in view
-//struct UpcomingMovieVO {
+//  Created by Marsal Silveira.
+//  Copyright © 2018 Marsal Silveira. All rights reserved.
 //
-//    private(set) var id: Int
-//    private(set) var posterPath: String?
-//    private(set) var title: String
-//    private(set) var genres: String
-//    private(set) var releaseDate: String
-//    private(set) var rating: String
-//    
-//    init(id: Int, posterPath: String?, title: String, genres: String, releaseDate: String, rating: String) {
-//        self.id = id
-//        self.posterPath = posterPath
-//        self.title = title
-//        self.genres = genres
-//        self.releaseDate = releaseDate
-//        self.rating = rating
-//    }
-//}
-//
-//protocol UpcomingMoviesPresenterProtocol: BasePresenterProtocol {
-//
-//    var router: UpcomingMoviesRouterProtocol? { get set }
-//    var movies: Driver<[UpcomingMovieVO]> { get }
-//
-//    func fetchMovies(reset: Bool)
-//
-//    func didSelectMovie(_ movie: UpcomingMovieVO)
-//}
-//
-//class UpcomingMoviesPresenter: BasePresenter {
-//
-//    // internal
-//    private let _interactor: UpcomingMoviesInteractorProtocol
-//    private let _disposeBag = DisposeBag()
-//
-//    private var _movies = Variable<[Movie]>([])
-//    private var _showLoading = true
-//
-//    // public
-//    public weak var router: UpcomingMoviesRouterProtocol?
-//
-//    init(interactor: UpcomingMoviesInteractorProtocol) {
-//        _interactor = interactor
-//
-//        super.init()
-//        self.bind()
-//    }
-//
-//    private func bind() {
-//
-//        _interactor.movies
-//            .drive(onNext: { [weak self] (response) in
-//                guard let strongSelf = self else { return }
-//
-//                switch response {
-//
-//                case .loading:
-//                    if strongSelf._showLoading {
-//                        strongSelf._viewState.value = .loading(LoadingViewModel(text: Strings.placeholderLoading()))
-//                    }
-//
-//                case .success(let movies):
-//                    strongSelf._viewState.value = .normal
-//                    strongSelf._movies.value = movies
-//
-//                case .failure(let error):
-//                    let placeholderViewModel = ErrorViewModel(text: Strings.errorDefault(), details: error.localizedDescription)
-//                    strongSelf._viewState.value = .error(placeholderViewModel)
-//
-//                default:
-//                    break
-//                }
-//            })
-//            .disposed(by: _disposeBag)
-//    }
-//}
-//
-//extension UpcomingMoviesPresenter: UpcomingMoviesPresenterProtocol {
-//
-//    var movies: Driver<[UpcomingMovieVO]> {
-//
-//        return _movies
-//            .asDriver()
-//            .flatMap { (movies) -> Driver<[UpcomingMovieVO]> in
-//
-//                let mm = movies.map { (movie) -> UpcomingMovieVO in
-//
-//                    let posterPath = movie.buildPosterPath()
-//                    let rating = "★ \(movie.rating)"
-//                    return UpcomingMovieVO(id: movie.id, posterPath: posterPath, title: movie.title, genres: movie.genresStr, releaseDate: movie.releaseDate, rating: rating)
-//                }
-//                return Driver.just(mm)
-//            }
-//    }
-//
-//    func fetchMovies(reset: Bool = false) {
-//        _showLoading = reset
-//        _interactor.fetchMovies(reset: reset)
-//    }
-//
-//    func didSelectMovie(_ movie: UpcomingMovieVO) {
-//
-//        guard let selectedMovie = _movies.value.filter({ (m) -> Bool in return m.id == movie.id }).first else {
-//            let placeholderViewModel = ErrorViewModel(text: Strings.errorDefault(), details: Strings.upcomingMoviesMovieNotFound())
-//            _viewState.value = .error(placeholderViewModel)
-//            return
-//        }
-//        router?.showDetails(for: selectedMovie)
-//    }
-//}
+
+import Foundation
+import XCTest
+import RxSwift
+import RxCocoa
+import RxTest
+
+@testable import Movies
+
+class UpcomingMoviesPresenterTests: XCTestCase {
+    
+    private var _disposeBag: DisposeBag!
+    private var _scheduler: TestScheduler!
+
+    private var _presenter: UpcomingMoviesPresenterProtocol!
+    
+    override func setUp() {
+        super.setUp()
+        print("setUp()")
+        
+        _disposeBag = DisposeBag()
+        _scheduler = TestScheduler(initialClock: 0)
+        _presenter = UpcomingMoviesPresenter(interactor: UpcomingMoviesInteractorMock())
+    }
+    
+    override func tearDown() {
+        super.tearDown()
+        print("tearDown()")
+        
+        _disposeBag = nil
+        _scheduler = nil
+        _presenter = nil
+    }
+
+    func test_movies() throws {
+        print(">>> test_moviesAllPages_ok")
+        print(">>> [START]")
+
+        let observer = _scheduler.createObserver([UpcomingMovieVO].self)
+        _presenter.movies.drive(observer).disposed(by: _disposeBag)
+
+        _presenter.fetchMovies(reset: true) // page 1
+        _presenter.fetchMovies(reset: false) // page 2
+        _presenter.fetchMovies(reset: false) // page 3 -- do nothing
+
+        // test pages
+        var page_ = 0
+        observer.events.forEach { (event) in
+            
+            page_ += 1
+            let movies = event.value.element ?? []
+            print("page#\(page_) -> \(movies.count)")
+            XCTAssert(movies.count == (2 * (page_ - 1)))
+        }
+        
+        // test all movies
+        guard let movies = observer.events.last?.value.element else {
+            XCTFail("movies is empty")
+            return
+        }
+        XCTAssert((movies[0].title == "Deadpool 2") && (movies[0].rating == "★ 8.0"))
+        XCTAssert((movies[1].title == "Red Sparrow") && (movies[1].rating == "★ 6.4"))
+        XCTAssert((movies[2].title == "Jurassic World: Fallen Kingdom") && (movies[2].rating == "★ 0.0"))
+        XCTAssert((movies[3].title == "A Quiet Place") && (movies[3].rating == "★ 5.9"))
+
+        print(">>> [END]")
+    }
+}

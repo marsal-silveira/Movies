@@ -23,7 +23,7 @@ class MovieRepositoryMock: MovieRepositoryProtocol {
         // page 2
         [
             Movie(id: 351286, title: "Jurassic World: Fallen Kingdom", posterPath: "", backdropPath: "", releaseDate: "2018-06-06", overview: "", rating: 0, genres: [Genre(id: 28, name: "Action")]),
-            Movie(id: 447332, title: "A Quiet Place", posterPath: "", backdropPath: "", releaseDate: "2018-04-05", overview: "", rating: 0, genres: [Genre(id: 53, name: "Thriller")])
+            Movie(id: 447332, title: "A Quiet Place", posterPath: "", backdropPath: "", releaseDate: "2018-04-05", overview: "", rating: 5.9, genres: [Genre(id: 32, name: "Comedy")])
         ]
     ]
 

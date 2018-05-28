@@ -38,12 +38,12 @@ class UpcomingMoviesInteractorTests: XCTestCase {
         _interactor = nil
     }
 
-    func test_moviesAllPages_ok() throws {
+    func test_movies() {
         print(">>> test_moviesAllPages_ok")
         print(">>> [START]")
 
         let observer = _scheduler.createObserver(RequestResponse<[Movie]>.self)
-        _interactor.movies.asDriver().drive(observer).disposed(by: _disposeBag)
+        _interactor.movies.drive(observer).disposed(by: _disposeBag)
         
         _interactor.fetchMovies(reset: true) // page 1
         _interactor.fetchMovies(reset: false) // page 2
@@ -51,7 +51,6 @@ class UpcomingMoviesInteractorTests: XCTestCase {
         
         var page_ = 0
         observer.events.forEach { (event) in
-//            print("event -> \(event.value)")
 
             let response = event.value.element ?? .new
             switch response {

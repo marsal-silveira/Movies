@@ -38,12 +38,12 @@ class StartupInteractorTests: XCTestCase {
         _interactor = nil
     }
 
-    func test_isDone_ok() throws {
+    func test_isDone() {
         print(">>> test_isDone_ok")
         print(">>> [START]")
         
         let observable = _scheduler.createObserver(RequestResponse<Void>.self)
-        _interactor.isDone.asDriver().drive(observable).disposed(by: _disposeBag)
+        _interactor.isDone.drive(observable).disposed(by: _disposeBag)
         
         _interactor.fetchInitialData()
         
