@@ -3,13 +3,26 @@ App to get upcoming movies using `The Movie Database (TMDb)` as reference.
 
 ## Screenshots
 
-**Under Construction**
+<table>
+  <tr>
+    <th>
+      <img src="Screenshots/1_Movies_upcoming.png" width="220"/>
+    </th>
+    <th>
+      <img src="Screenshots/2_Movies_details_port.png" width="220"/>
+    </th>
+    <th>
+      <img src="Screenshots/3_Movies_details_land.png" width="220"/>
+    </th>
+  </tr>
+</table>
 
 ## Development Stack
 
 - xCode 9.2
 - Swift 4.0
 - iOS Deployment Target: 10.0
+- XCTests for Unit Tests (needs improvement)
 - CocoaPods as Dependency Manager
 - Architecture: VIPER + ViewModel + Reactive (RxSwift)
 - Moya + Alamofire + ObjectMapper for Network Layer
