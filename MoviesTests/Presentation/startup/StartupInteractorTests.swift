@@ -22,7 +22,6 @@ class StartupInteractorTests: XCTestCase {
     
     override func setUp() {
         super.setUp()
-        print("setUp()")
         
         _disposeBag = DisposeBag()
         _scheduler = TestScheduler(initialClock: 0)
@@ -31,24 +30,25 @@ class StartupInteractorTests: XCTestCase {
     
     override func tearDown() {
         super.tearDown()
-        print("tearDown()")
         
         _disposeBag = nil
         _scheduler = nil
         _interactor = nil
     }
+    
+    private func log(message: String) {
+        print("\(String(describing: self)) >> \(message)")
+    }
 
     func test_isDone() {
-        print(">>> test_isDone_ok")
-        print(">>> [START]")
+        self.log(message: "[START]")
         
-        let observable = _scheduler.createObserver(RequestResponse<Void>.self)
-        _interactor.isDone.drive(observable).disposed(by: _disposeBag)
+        let observer = _scheduler.createObserver(RequestResponse<Void>.self)
+        _interactor.isDone.drive(observer).disposed(by: _disposeBag)
         
         _interactor.fetchInitialData()
         
-        XCTAssert(observable.events.contains { event in
-            print("event -> \(event.value)")
+        XCTAssert(observer.events.contains { event in
             let response = event.value.element ?? .new
             switch response {
             case .success:
@@ -57,6 +57,7 @@ class StartupInteractorTests: XCTestCase {
                 return false
             }
         })
-        print(">>> [END]")
+        
+        self.log(message: "[END]")
     }
 }

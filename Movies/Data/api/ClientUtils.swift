@@ -2,7 +2,7 @@
 //  ClientUtils.swift
 //  Movies
 //
-//  Created by Marsal Silveira on 21/03/18.
+//  Created by Marsal Silveira.
 //  Copyright © 2018 Marsal Silveira. All rights reserved.
 //
 

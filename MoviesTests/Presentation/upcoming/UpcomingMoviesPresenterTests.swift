@@ -23,25 +23,26 @@ class UpcomingMoviesPresenterTests: XCTestCase {
     
     override func setUp() {
         super.setUp()
-        print("setUp()")
         
         _disposeBag = DisposeBag()
         _scheduler = TestScheduler(initialClock: 0)
-        _presenter = UpcomingMoviesPresenter(interactor: UpcomingMoviesInteractorMock())
+        _presenter = UpcomingMoviesPresenter(interactor: UpcomingMoviesInteractor(repository: MovieRepositoryMock()))
     }
     
     override func tearDown() {
         super.tearDown()
-        print("tearDown()")
         
         _disposeBag = nil
         _scheduler = nil
         _presenter = nil
     }
+    
+    private func log(message: String) {
+        print("\(String(describing: self)) >> \(message)")
+    }
 
     func test_movies() throws {
-        print(">>> test_moviesAllPages_ok")
-        print(">>> [START]")
+        self.log(message: "[START]")
 
         let observer = _scheduler.createObserver([UpcomingMovieVO].self)
         _presenter.movies.drive(observer).disposed(by: _disposeBag)
@@ -56,7 +57,7 @@ class UpcomingMoviesPresenterTests: XCTestCase {
             
             page_ += 1
             let movies = event.value.element ?? []
-            print("page#\(page_) -> \(movies.count)")
+            self.log(message: "page#\(page_) >> \(movies.count)")
             XCTAssert(movies.count == (2 * (page_ - 1)))
         }
         
@@ -70,6 +71,6 @@ class UpcomingMoviesPresenterTests: XCTestCase {
         XCTAssert((movies[2].title == "Jurassic World: Fallen Kingdom") && (movies[2].rating == "★ 0.0"))
         XCTAssert((movies[3].title == "A Quiet Place") && (movies[3].rating == "★ 5.9"))
 
-        print(">>> [END]")
+        self.log(message: "[END]")
     }
 }

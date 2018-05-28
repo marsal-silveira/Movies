@@ -14,7 +14,6 @@ protocol GenreRepositoryProtocol {
     var genres: Observable<RequestResponse<[Genre]>> { get }
     func fetchGenres()
     func getAllGenres() -> [Genre]
-    func getGenres(byIds ids: [Int]) -> [Genre]
 }
 
 class GenreRepository: BaseRepository {
@@ -22,9 +21,8 @@ class GenreRepository: BaseRepository {
     private let _TMDbAPI: TMDbAPIProtocol
     private let _dao: GenreDaoProtocol
     
-    private var _genresResponse = Variable<RequestResponse<[Genre]>>(.new)
-    private var _genres: [Genre] = []
-    
+    private var _genres = Variable<RequestResponse<[Genre]>>(.new)
+
     private var _disposeBag = DisposeBag()
     
     init(tMDbAPI: TMDbAPIProtocol, dao: GenreDaoProtocol) {
@@ -51,13 +49,13 @@ class GenreRepository: BaseRepository {
                     // save genres into local storage and send response
                     do {
                         try strongSelf.saveGenresLocalStorage(genres: genres)
-                        strongSelf._genresResponse.value = .success(genres)
+                        strongSelf._genres.value = .success(genres)
                     } catch let error {
-                        strongSelf._genresResponse.value = .failure(error)
+                        strongSelf._genres.value = .failure(error)
                     }
                     
                 case .error(let error):
-                    strongSelf._genresResponse.value = .failure(error)
+                    strongSelf._genres.value = .failure(error)
                 }
             }
             .disposed(by: _disposeBag)
@@ -71,9 +69,9 @@ class GenreRepository: BaseRepository {
         
         do {
             let genres = try _dao.getAll()
-            _genresResponse.value = .success(genres)
+            _genres.value = .success(genres)
         } catch let error {
-            _genresResponse.value = .failure(error)
+            _genres.value = .failure(error)
         }
     }
     
@@ -91,12 +89,12 @@ class GenreRepository: BaseRepository {
 extension GenreRepository: GenreRepositoryProtocol {
     
     var genres: Observable<RequestResponse<[Genre]>> {
-        return _genresResponse.asObservable()
+        return _genres.asObservable()
     }
     
     func fetchGenres() {
         
-        _genresResponse.value = .loading
+        _genres.value = .loading
         
         if NetworkManager.shared.isReachable {
             self.fetchGenresFromAPI()
@@ -105,6 +103,7 @@ extension GenreRepository: GenreRepositoryProtocol {
         }
     }
     
+    /// get genres from local storage...
     func getAllGenres() -> [Genre] {
         do {
             return try _dao.getAll()
@@ -112,12 +111,5 @@ extension GenreRepository: GenreRepositoryProtocol {
             print("error getting genres. \(error.localizedDescription)")
             return []
         }
-    }
-    
-    func getGenres(byIds ids: [Int]) -> [Genre] {
-        
-        return _genres.filter({ (genre) -> Bool in
-            return ids.contains(genre.id)
-        })
     }
 }

@@ -1,5 +1,5 @@
 //
-//  UpcomingMoviesInteractorTests.swift
+//  MovieRepositoryTests.swift
 //  MoviesTests
 //
 //  Created by Marsal Silveira.
@@ -14,18 +14,18 @@ import RxTest
 
 @testable import Movies
 
-class UpcomingMoviesInteractorTests: XCTestCase {
+class MovieRepositoryTests: XCTestCase {
 
     private var _disposeBag: DisposeBag!
     private var _scheduler: TestScheduler!
-    private var _interactor: UpcomingMoviesInteractorProtocol!
+    private var _repository: MovieRepositoryProtocol!
 
     override func setUp() {
         super.setUp()
 
         _disposeBag = DisposeBag()
         _scheduler = TestScheduler(initialClock: 0)
-        _interactor = UpcomingMoviesInteractor(repository: MovieRepositoryMock())
+        _repository = MovieRepository(tMDbAPI: TMDbAPIMock(), dao: MovieDaoMock(), genreRepository: GenreRepositoryMock())
     }
 
     override func tearDown() {
@@ -33,32 +33,27 @@ class UpcomingMoviesInteractorTests: XCTestCase {
 
         _disposeBag = nil
         _scheduler = nil
-        _interactor = nil
+        _repository = nil
     }
-    
+
     private func log(message: String) {
         print("\(String(describing: self)) >> \(message)")
     }
 
-    func test_movies() {
+    func test_allGenres() {
         self.log(message: "[START]")
 
-        let observer = _scheduler.createObserver(RequestResponse<[Movie]>.self)
-        _interactor.movies.drive(observer).disposed(by: _disposeBag)
-        
-        _interactor.fetchMovies(reset: true) // page 1
-        _interactor.fetchMovies(reset: false) // page 2
-        _interactor.fetchMovies(reset: false) // page 3 -- do nothing
-        
-        var page_ = 0
+        let observer = _scheduler.createObserver(RequestResponse<UpcomingMovies>.self)
+        _repository.upcomingMovies.asDriver(onErrorJustReturn: .failure(MoviesError.error(description: "TODO:"))).drive(observer).disposed(by: _disposeBag)
+        _repository.fetchUpcomingMovies(page: 1)
+
         observer.events.forEach { (event) in
 
             let response = event.value.element ?? .new
             switch response {
-            case .success(let movies):
-                page_ += 1
-                self.log(message: "page#\(page_) >> \(movies.count)")
-                XCTAssert(movies.count == (2 * page_))
+            case .success(let upcomingMovies):
+                self.log(message: "upcomingMovies.movies >> \(upcomingMovies.movies.count)")
+                XCTAssert(upcomingMovies.movies.count == 4)
             case .failure(let error):
                 XCTFail(error.localizedDescription)
             default:
@@ -66,6 +61,6 @@ class UpcomingMoviesInteractorTests: XCTestCase {
             }
         }
 
-        self.log(message: "[START]")
+        self.log(message: "[END]")
     }
 }

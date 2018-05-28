@@ -31,8 +31,11 @@ extension UpcomingMovies {
               let moviesResult = upcomingMoviesResult.movies else {
             return nil
         }
-        let movies = moviesResult.map { (movieResult) -> Movie in
-            return Movie.map(movieResult: movieResult, genres: genres)!
+        var movies: [Movie] = []
+        for movieResult in moviesResult {
+            if let movie = Movie.map(movieResult: movieResult, genres: genres) {
+                movies.append(movie)
+            }
         }
         return UpcomingMovies(page: page, totalPages: totalPages, movies: movies)
     }
