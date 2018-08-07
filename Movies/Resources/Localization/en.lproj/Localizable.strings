@@ -1,0 +1,39 @@
+/* 
+  Localizable.strings
+  Movies
+
+  Created by Marsal Silveira.
+  Copyright © 2018 Marsal Silveira. All rights reserved.
+*/
+
+// English - Base
+
+// Error
+"error.404" = "¯\\_(ツ)_/¯"; // just for fun...
+"error.default" = "Oops... something went wrong";
+"error.network" = "Could not connect with network, please try again";
+"error.timeout" = "The operation couldn't be completed dua to a timeout";
+"error.parsing.json" = "Could not parse data...";
+"error.unexpected.response" = "Server return an unexpected response";
+
+// Default
+"default.try.again" = "Try Again";
+"default.ok" = "OK";
+"default.cancel" = "Cancel";
+"default.yes" = "Yes";
+"default.confirm" = "Confirm";
+"default.no" = "No";
+"default.close" = "Close";
+
+// Placeholder
+"placeholder.loading" = "Loading...";
+
+// Upcoming Movies
+"upcoming.movies.title" = "Upcoming";
+"upcoming.movies.movie.not.found" = "Selected movie not found";
+
+// Movie Details
+"movie.details.title" = "Details";
+"movie.details.rating" = "Rating:";
+"movie.details.release.date" = "Release Date:";
+"movie.details.genre" = "Genre:";

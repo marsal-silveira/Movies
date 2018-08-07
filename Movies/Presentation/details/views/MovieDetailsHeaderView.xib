@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="MovieDetailsHeaderView" customModule="Movies" customModuleProvider="target">
+            <connections>
+                <outlet property="backdropImage" destination="jWm-QW-atv" id="adK-2H-hJZ"/>
+                <outlet property="loadignIndicator" destination="Z8r-2g-v0J" id="L6Q-Ak-01L"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Jug-LS-Jy6">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="250"/>
+            <subviews>
+                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="img_placeholder" translatesAutoresizingMaskIntoConstraints="NO" id="jWm-QW-atv">
+                    <rect key="frame" x="0.0" y="0.0" width="375" height="250"/>
+                </imageView>
+                <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" animating="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="Z8r-2g-v0J">
+                    <rect key="frame" x="169.5" y="106.5" width="37" height="37"/>
+                </activityIndicatorView>
+            </subviews>
+            <color key="backgroundColor" red="0.27058823529999998" green="0.35294117650000001" blue="0.3921568627" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <constraints>
+                <constraint firstItem="Z8r-2g-v0J" firstAttribute="centerX" secondItem="jWm-QW-atv" secondAttribute="centerX" id="K0I-fW-aiC"/>
+                <constraint firstAttribute="bottom" secondItem="jWm-QW-atv" secondAttribute="bottom" id="VF3-ar-ajw"/>
+                <constraint firstAttribute="trailing" secondItem="jWm-QW-atv" secondAttribute="trailing" id="ZQN-nd-RfM"/>
+                <constraint firstItem="Z8r-2g-v0J" firstAttribute="centerY" secondItem="jWm-QW-atv" secondAttribute="centerY" id="bG4-WR-UTz"/>
+                <constraint firstItem="jWm-QW-atv" firstAttribute="top" secondItem="Jug-LS-Jy6" secondAttribute="top" id="gPz-wn-yin"/>
+                <constraint firstItem="jWm-QW-atv" firstAttribute="leading" secondItem="Jug-LS-Jy6" secondAttribute="leading" id="wG6-6O-p9v"/>
+            </constraints>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <viewLayoutGuide key="safeArea" id="5W3-ev-VyI"/>
+            <point key="canvasLocation" x="44" y="-102"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="img_placeholder" width="420" height="420"/>
+    </resources>
+</document>

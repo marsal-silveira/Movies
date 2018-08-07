@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_0" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="StartupViewController" customModule="Movies" customModuleProvider="target">
+            <connections>
+                <outlet property="view" destination="eg4-eS-IWx" id="cgz-jU-M8A"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="eg4-eS-IWx">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="logo" translatesAutoresizingMaskIntoConstraints="NO" id="q1n-MJ-KIC">
+                    <rect key="frame" x="32" y="0.0" width="256" height="568"/>
+                </imageView>
+            </subviews>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+            <constraints>
+                <constraint firstItem="q1n-MJ-KIC" firstAttribute="top" secondItem="eg4-eS-IWx" secondAttribute="top" id="34H-67-T5x"/>
+                <constraint firstAttribute="bottom" secondItem="q1n-MJ-KIC" secondAttribute="bottom" id="5b4-6I-WUX"/>
+                <constraint firstAttribute="trailing" secondItem="q1n-MJ-KIC" secondAttribute="trailing" constant="32" id="A3R-dZ-Ro0"/>
+                <constraint firstItem="q1n-MJ-KIC" firstAttribute="leading" secondItem="eg4-eS-IWx" secondAttribute="leading" constant="32" id="VuK-29-l4k"/>
+            </constraints>
+            <viewLayoutGuide key="safeArea" id="kdb-Yc-Tq4"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="logo" width="128" height="128"/>
+    </resources>
+</document>

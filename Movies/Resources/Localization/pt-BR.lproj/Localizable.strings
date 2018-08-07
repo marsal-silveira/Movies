@@ -1,0 +1,39 @@
+/* 
+  Localizable.strings
+  Movies
+
+  Created by Marsal Silveira.
+  Copyright © 2018 Marsal Silveira. All rights reserved.
+*/
+
+// Brazil - Portuguese [pt-BR]
+
+// Error
+"error.404" = "¯\\_(ツ)_/¯"; // just for fun...
+"error.default" = "Oops... algo deu errado";
+"error.network" = "Não foi possível conectar com a rede. Por favor tente novamente";
+"error.timeout" = "Tempo de resposta excedido. Por favor tente novamente";
+"error.parsing.json" = "Não foi possível extrair os dados";
+"error.unexpected.response" = "Servicor retornou uma resposta inesperada";
+
+// Default
+"default.try.again" = "Tentar Novamente";
+"default.ok" = "OK";
+"default.cancel" = "Cancelar";
+"default.yes" = "Sim";
+"default.confirm" = "Confirmar";
+"default.no" = "Não";
+"default.close" = "Fechar";
+
+// Placeholder
+"placeholder.loading" = "Carregando...";
+
+// Upcoming Movies
+"upcoming.movies.title" = "Lançamentos";
+"upcoming.movies.movie.not.found" = "Não foi possível encontrar o filme selecionado";
+
+// Movie Details
+"movie.details.title" = "Detalhes";
+"movie.details.rating" = "Avaliação:";
+"movie.details.release.date" = "Date de Lançamento:";
+"movie.details.genre" = "Gênero:";
